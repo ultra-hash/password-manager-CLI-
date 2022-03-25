@@ -3,11 +3,11 @@ import sqlite3, os
 
 class db:
 
-    def __init__(self, dbname) -> None:
+    def __init__(self, dbname):
         self.database = dbname
         self.db_path = os.getcwd()
 
-        if not os.fspath(f"{os.getcwd()}+/{self.database}"):
+        if not os.path.exists(f"{self.database}"):
             self.createTablePassword()
 
     def connect(self):
@@ -15,8 +15,9 @@ class db:
         self.curser = self.conn.cursor()
 
     def exec(self, queryString):
-        execresult = self.conn.execute(queryString)
+        execresult = self.curser.execute(queryString)
         return execresult
+
     def commit(self):
         self.conn.commit()
 
@@ -26,7 +27,7 @@ class db:
 
     def createTablePassword(self):
         self.connect()
-        self.conn.execute(f"""CREATE TABLE passwords(
+        self.curser.execute(f"""CREATE TABLE passwords(
             website_name text,
             username text,
             email text,
@@ -41,6 +42,13 @@ class db:
         self.close()
         return result
 
+    def select_by_rowid(self, rowid):
+        self.connect()
+        result = self.exec(f"SELECT * from passwords WHERE rowid={rowid}")
+        result = result.fetchall()
+        self.close()
+        return result
+
     def add_entries_to_database(self):
         website = input("Enter The website name : ")
         username = input("Enter The usename : ")
@@ -49,19 +57,15 @@ class db:
         
         allgood = True
         #check entries given:
-        if website and website != "":
-            if username and username != "":
-                if email and email != "":
-                    if password and password != "":
-                        pass
-                    else:
-                        print("Please enter a valid password")
-                        allgood = False
+        if website != "":
+            if username != "" or email != "":
+                if password != "":
+                    pass
                 else:
-                    print("Please enter a valid email address")
+                    print("Please enter a valid password")
                     allgood = False
             else:
-                print("Please enter a valid username")
+                print("Please enter atleast one valid username or email")
                 allgood = False
         else:
             print("Please enter a valid website")
@@ -81,9 +85,38 @@ class db:
         self.commit()
         self.close()
 
+    def edit_entries_by_rowid(self, rowid):
+        # Retreving data from database
+        [(website, username, email, password)] = self.select_by_rowid(rowid)
+
+        #Taking input to update
+        print("Press Enter to leave as previous")
+        edit_website = input(f"webiste -> {website} : ")
+        edit_username = input(f"username -> {username} : ")
+        edit_email = input(f"email -> {email} : ")
+        edit_password = input(f"password -> {password} : ")
+
+        #checking and updating variables before updating database
+        edit_website = website if edit_website == "" else edit_website
+        edit_username = username if edit_username == "" else edit_username
+        edit_email = email if edit_email == "" else edit_email
+        edit_password = password if edit_password == "" else edit_password
+
+        self.connect()
+        self.exec(f"""UPDATE passwords
+            SET website_name = '{edit_website}',
+            username = '{edit_username}',
+            email = '{edit_email}',
+            password = '{edit_password}'
+            WHERE rowid = {rowid}
+            """)
+        self.commit()
+        self.close()
+
 if __name__ == "__main__":
     data = db('dbpass.db')
+    #print(data.selectall())
     #data.add_entries_to_database()
-    print(data.select())
-    #data.delete_entries_by_rowid(3)
-    
+    #data.delete_entries_by_rowid(2)
+    #data.edit_entries_by_rowid(1)
+    #print(data.selectall())
