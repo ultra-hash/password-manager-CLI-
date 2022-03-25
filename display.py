@@ -18,6 +18,11 @@ def view():
                 max_len_list[j] = len(str(result[i][j]))
 
     # Printing as table
+    print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
+    print("| "+ "s.no".center(max_len_list[0]) + " | " + "website".center(max_len_list[1]) + " | " + "username".center(max_len_list[2]) + " | " + "email address".center(max_len_list[3]) + " | " + "password".center(max_len_list[4]) + " |" )
+    print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
+
     for i in result:
         print("| " + str(i[0]).ljust(max_len_list[0]) + " | " + str(i[1]).ljust(max_len_list[1]) + " | " + str(i[2]).ljust(max_len_list[2]) + " | " + str(i[3]).ljust(max_len_list[3]) + " | " + str(i[4]).ljust(max_len_list[4]) + " |")        
 
+    print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
