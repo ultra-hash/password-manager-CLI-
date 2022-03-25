@@ -50,10 +50,10 @@ class db:
         return result
 
     def add_entries_to_database(self):
-        website = input("Enter The website name : ")
-        username = input("Enter The usename : ")
-        email = input("Enter The email address : ")
-        password = input("Enter The password :")
+        website = input("Enter The website name : ").strip()
+        username = input("Enter The usename : ").strip()
+        email = input("Enter The email address : ").strip()
+        password = input("Enter The password :").strip()
         
         allgood = True
         #check entries given:
@@ -114,7 +114,7 @@ class db:
         self.close()
 
 if __name__ == "__main__":
-    data = db('dbpass.db')
+    data = db('pass.db')
     #print(data.selectall())
     #data.add_entries_to_database()
     #data.delete_entries_by_rowid(2)
