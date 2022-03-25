@@ -34,7 +34,7 @@ class db:
         );
         """)
 
-    def select(self):
+    def selectall(self):
         self.connect()
         result = self.exec(f"SELECT rowid,* from passwords")
         result = result.fetchall()
