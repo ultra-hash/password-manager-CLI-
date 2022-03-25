@@ -1,5 +1,4 @@
 # password-manager-CLI-
-
 Try yourself clone this repo and run display.py and follow the lead on screen
 
 Basic functioning complete
