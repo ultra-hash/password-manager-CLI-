@@ -26,3 +26,30 @@ def view():
         print("| " + str(i[0]).ljust(max_len_list[0]) + " | " + str(i[1]).ljust(max_len_list[1]) + " | " + str(i[2]).ljust(max_len_list[2]) + " | " + str(i[3]).ljust(max_len_list[3]) + " | " + str(i[4]).ljust(max_len_list[4]) + " |")        
 
     print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
+
+
+while Display:
+    try: 
+        print(Root)
+        x = int(input(f"Enter One of The Options : "))
+    except ValueError:
+        print("\n\ninvalid input you must use number\n\n")
+        continue
+
+    if x == 1:
+        view()
+    elif x == 2:
+        db.add_entries_to_database()
+        view()
+    elif x == 3:
+        view()
+        rowid = int(input('Enter the s.no to edit : '))
+        db.edit_entries_by_rowid(rowid)
+    elif x == 4:
+        view()
+        rowid = int(input('Enter the s.no to delete : '))
+        db.delete_entries_by_rowid(rowid)
+    elif x == 5:
+        exit()
+    else:
+        print("invalid input you must use number between 1 - 5")
