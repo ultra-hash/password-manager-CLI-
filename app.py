@@ -1,5 +1,7 @@
+from base64 import encode
 import sqlite3, os
-
+from turtle import end_fill
+from cryptography.fernet import Fernet
 
 class db:
 
@@ -113,10 +115,57 @@ class db:
         self.commit()
         self.close()
 
+class ciphertext:
+    
+    def __init__(self,keyname):
+        self.name = keyname
+        
+        if not os.path.exists(self.name):
+            self.generate_key()
+
+    def generate_key(self):
+        f = Fernet.generate_key()
+        with open(self.name, 'wb') as file:
+            file.write(f)
+        
+    def encrypt(self, token):
+        with open(self.name, 'rb') as file:
+            key = file.read()
+        token = Fernet(key).encrypt(bytes(token,'utf-8'))
+        return token
+
+    def decrypt(self, token):
+        with open(self.name, 'rb') as file:
+            key = file.read()
+        token = Fernet(key).decrypt(token)
+        return token.decode('utf-8')
+
 if __name__ == "__main__":
-    data = db('pass.db')
+    #data = db('pass.db')
     #print(data.selectall())
     #data.add_entries_to_database()
     #data.delete_entries_by_rowid(2)
     #data.edit_entries_by_rowid(1)
     #print(data.selectall())
+
+    # Put this somewhere safe!
+
+    '''key = Fernet.generate_key()
+
+    f = Fernet(key)
+
+    with open('key', 'wb') as file:
+        file.write(f)
+
+    token = f.encrypt(b"A really secret message. Not for prying eyes.")
+
+    print(token)
+
+    token = f.decrypt(token)
+
+    print(token)'''
+
+    key = ciphertext('key')
+    name = input("enter your name : ")
+    e = key.encrypt(name)
+    print(e, key.decrypt(e))
