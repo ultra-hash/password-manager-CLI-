@@ -1,12 +1,12 @@
 import app
 
-db = app.db('pass.db')
+db = app.db('cipherpass.db', 'key')
 Display = True
 Root = "\n[1] -> view , [2] -> ADD , [3] -> EDIT , [4] -> DELETE , [5] -> EXIT\n"
 
 def view():
     # [s.no, website_max_len , username_max_len ,email_max_len, password_max_len ]
-    max_len_list = [4,0,0,0,0]
+    max_len_list = [4,0,10,15,0]
 
     # fetching results from db
     result = db.selectall()
@@ -19,11 +19,13 @@ def view():
 
     # Printing as table
     print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
-    print("| "+ "s.no".center(max_len_list[0]) + " | " + "website".center(max_len_list[1]) + " | " + "username".center(max_len_list[2]) + " | " + "email address".center(max_len_list[3]) + " | " + "password".center(max_len_list[4]) + " |" )
+    #print("| "+ "s.no".center(max_len_list[0]) + " | " + "website".center(max_len_list[1]) + " | " + "username".center(max_len_list[2]) + " | " + "email address".center(max_len_list[3]) + " | " + "password".center(max_len_list[4]) + " |" )
+    print("| "+ "s.no".center(max_len_list[0]) + " | " + "website".center(max_len_list[1]) + " | " + "username".center(max_len_list[2]) + " | " + "email address".center(max_len_list[3]) + " | " + "For password".center(17) + " |" )
     print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
 
     for i in result:
-        print("| " + str(i[0]).ljust(max_len_list[0]) + " | " + str(i[1]).ljust(max_len_list[1]) + " | " + str(i[2]).ljust(max_len_list[2]) + " | " + str(i[3]).ljust(max_len_list[3]) + " | " + str(i[4]).ljust(max_len_list[4]) + " |")        
+        #print("| " + str(i[0]).ljust(max_len_list[0]) + " | " + str(i[1]).ljust(max_len_list[1]) + " | " + str(i[2]).ljust(max_len_list[2]) + " | " + str(i[3]).ljust(max_len_list[3]) + " | " + str(i[4]).ljust(max_len_list[4]) + " |")        
+        print("| " + str(i[0]).ljust(max_len_list[0]) + " | " + str(i[1]).ljust(max_len_list[1]) + " | " + str(i[2]).ljust(max_len_list[2]) + " | " + str(i[3]).ljust(max_len_list[3]) + " | " + f"Press {i[0]} and Enter" + " |")        
 
     print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
 
@@ -38,6 +40,15 @@ while Display:
 
     if x == 1:
         view()
+        try:
+            rowid = int(input('Enter the s.no to show password or 0 to skip: '))
+            if rowid == 0:
+                continue
+            else:
+                print('Password: ', db.show_password_with_rowid(rowid))
+        except ValueError:
+            print("\n\nInvalid Input you must use number\n\n")
+            continue
     elif x == 2:
         db.add_entries_to_database()
         view()

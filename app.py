@@ -1,13 +1,12 @@
-from base64 import encode
 import sqlite3, os
-from turtle import end_fill
 from cryptography.fernet import Fernet
 
 class db:
 
-    def __init__(self, dbname):
+    def __init__(self, dbname, key):
         self.database = dbname
         self.db_path = os.getcwd()
+        self.key = ciphertext(key)
 
         if not os.path.exists(f"{self.database}"):
             self.createTablePassword()
@@ -76,6 +75,12 @@ class db:
         if not allgood:
             return 
 
+        # encrypt password
+        password = self.key.encrypt(password)
+
+        password = str(password)[2:-1] # simple fix to work around quotation problem during submiting code high risk to leave this code
+
+        #connecting to DB and sending to DB
         self.connect()
         self.exec(f"INSERT INTO passwords VALUES ('{website}', '{username}', '{email}', '{password}')")
         self.commit()
@@ -90,6 +95,10 @@ class db:
     def edit_entries_by_rowid(self, rowid):
         # Retreving data from database
         [(website, username, email, password)] = self.select_by_rowid(rowid)
+        
+        # Decrypting password to show to user for editing password
+        password = bytes(password, 'utf-8')
+        password = self.key.decrypt(password)
 
         #Taking input to update
         print("Press Enter to leave as previous")
@@ -102,7 +111,14 @@ class db:
         edit_website = website if edit_website == "" else edit_website
         edit_username = username if edit_username == "" else edit_username
         edit_email = email if edit_email == "" else edit_email
-        edit_password = password if edit_password == "" else edit_password
+
+        #Also encrypting password before sending into DB
+        if edit_password == "":
+            edit_password = password
+        else:
+            edit_password = self.key.encrypt(edit_password)
+            edit_password = str(edit_password)[2:-1]
+
 
         self.connect()
         self.exec(f"""UPDATE passwords
@@ -114,6 +130,14 @@ class db:
             """)
         self.commit()
         self.close()
+    
+    def show_password_with_rowid(self, rowid):
+        [(website, username, email, password)] = self.select_by_rowid(rowid)
+        
+        # Decrypting password to show to user for editing password
+        password = bytes(password, 'utf-8')
+        password = self.key.decrypt(password)
+        return password
 
 class ciphertext:
     
@@ -166,6 +190,12 @@ if __name__ == "__main__":
     print(token)'''
 
     key = ciphertext('key')
-    name = input("enter your name : ")
+    #name = input("enter your name : ")
+    name = "swamy"
     e = key.encrypt(name)
     print(e, key.decrypt(e))
+    b = e.strip()
+    c = str(e)[2:-1]
+    print(c,b)
+    again = bytes(c, "utf-8")
+    print(again, key.decrypt(again))
