@@ -2,7 +2,22 @@ import app
 
 db = app.db('cipherpass.db', 'key')
 Display = True
-Root = "\n[1] -> view , [2] -> ADD , [3] -> EDIT , [4] -> DELETE , [5] -> EXIT\n"
+Root = "\n[1] -> VIEW\n[2] -> ADD\n[3] -> EDIT\n[4] -> DELETE\n[5] -> EXIT\n"
+info_card = """
+ ______                                           __ 
+|   __ \.---.-.-----.-----.--.--.--.-----.----.--|  |
+|    __/|  _  |__ --|__ --|  |  |  |  _  |   _|  _  |
+|___|   |___._|_____|_____|________|_____|__| |_____|
+                                                     
+ _______                                             
+|   |   |.---.-.-----.---.-.-----.-----.----.        
+|       ||  _  |     |  _  |  _  |  -__|   _|        
+|__|_|__||___._|__|__|___._|___  |_____|__|          
+                           |_____|                   
+
+"""
+
+#EPass= input("Enter Password :" )
 
 def view():
     # [s.no, website_max_len , username_max_len ,email_max_len, password_max_len ]
@@ -31,7 +46,8 @@ def view():
 
 
 while Display:
-    try: 
+    try:
+        print(info_card)
         print(Root)
         x = int(input(f"Enter One of The Options : "))
     except ValueError:
