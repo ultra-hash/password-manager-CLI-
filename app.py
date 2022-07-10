@@ -10,6 +10,8 @@ class db:
 
         if not os.path.exists(f"{self.database}"):
             self.createTablePassword()
+            self.commit()
+            self.close()
 
     def connect(self):
         self.conn = sqlite3.connect(self.database)
