@@ -44,10 +44,10 @@ def view():
 
     print("".ljust((sum(max_len_list)+(6*3))//2, '-') + "".rjust((sum(max_len_list)+(6*3))//2, '-')) # decoration
 
+print(info_card)
 
 while Display:
     try:
-        print(info_card)
         print(Root)
         x = int(input(f"Enter One of The Options : "))
     except ValueError:
@@ -55,28 +55,48 @@ while Display:
         continue
 
     if x == 1:
+        app.clear_screen()
         view()
         try:
             rowid = int(input('Enter the s.no to show password or 0 to skip: '))
             if rowid == 0:
+                app.clear_screen()
                 continue
             else:
+                print('-'*20)
                 print('Password: ', db.show_password_with_rowid(rowid))
+                print('-'*20)
+                print(input("Press Enter to continue"))
+                app.clear_screen()
         except ValueError:
             print("\n\nInvalid Input you must use number\n\n")
             continue
+        app.clear_screen()
     elif x == 2:
+        app.clear_screen()
         db.add_entries_to_database()
-        view()
+        app.clear_screen()
     elif x == 3:
+        app.clear_screen()
         view()
-        rowid = int(input('Enter the s.no to edit : '))
-        db.edit_entries_by_rowid(rowid)
+        try:
+            rowid = int(input('Enter the s.no to edit : '))
+            db.edit_entries_by_rowid(rowid)
+        except ValueError:
+            print("Invalid input Try again from start")
+            print("press Enter to Continue")
+        app.clear_screen()
     elif x == 4:
+        app.clear_screen()
         view()
-        rowid = int(input('Enter the s.no to delete : '))
-        db.delete_entries_by_rowid(rowid)
+        try:
+            rowid = int(input('Enter the s.no to delete : '))
+            db.delete_entries_by_rowid(rowid)
+        except ValueError:
+            print("Invalid input Try again from start")
+            print("press Enter to Continue")
+        app.clear_screen()
     elif x == 5:
         exit()
     else:
-        print("invalid input you must use number between 1 - 5")
+        print("invalid input you must use number between 1 - 5")    

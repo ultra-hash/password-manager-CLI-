@@ -1,4 +1,4 @@
-import sqlite3, os
+import sqlite3, os, platform
 from cryptography.fernet import Fernet
 
 class db:
@@ -165,6 +165,12 @@ class ciphertext:
             key = file.read()
         token = Fernet(key).decrypt(token)
         return token.decode('utf-8')
+
+def clear_screen():
+    if platform.system() == 'Windows':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 if __name__ == "__main__":
     #data = db('pass.db')
