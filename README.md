@@ -22,7 +22,7 @@ The Basic functionality
 4. [x] View all Entries
 
 Next Development phase
-1. [x] encrypting the password before submiting to database
+1. [x] encrypting the password before submitting to database
 2. [ ] login ( master password ) to use this service
 3. [ ] Online backup
 4. [ ] export and import functionality
