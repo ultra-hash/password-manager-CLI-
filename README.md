@@ -10,6 +10,10 @@ Change directory to `password-manager-terminal`
 ```
 cd password-manager-terminal 
 ```
+Install requirements/dependencies
+```
+pip install -r requirements.txt
+```
 Run
 ```
 python display.py 
